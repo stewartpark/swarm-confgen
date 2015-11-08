@@ -1,0 +1,5 @@
+testapp:
+  containers:
+    name: ^testapp_
+  port: 80
+  domain: testapp.com
