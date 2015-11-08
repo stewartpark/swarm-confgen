@@ -16,6 +16,7 @@ def run(cmdline):
 
 if __name__ == "__main__":
     apps = []
+    service_ports = set()
     for app_name in config:
         apps.append(dict(
             name=app_name,
@@ -25,6 +26,7 @@ if __name__ == "__main__":
             domain=config[app_name]['domain'],
             port=config[app_name]['port']
         ))
+        service_ports.add(config[app_name]['port'])
 
     print '[+] Generating config files...'
     os.chdir('src')
@@ -33,7 +35,7 @@ if __name__ == "__main__":
             realpath = os.path.join(path[1:], fn)
             print ' - %s' % realpath
             template = Template(open("." + realpath).read())
-            text = template.render(apps=apps, run=run)
+            text = template.render(apps=apps, service_ports=service_ports, run=run)
             try:
                 f = open(realpath, "w+")
                 f.write(text)
@@ -41,6 +43,7 @@ if __name__ == "__main__":
                 print '   => Done.'
             except:
                 print '   => Failed.'
+                print text
     print '[+] Refreshing services...'
     for cmdline in cmdlines_to_run:
         print ' - "%s"' % cmdline
