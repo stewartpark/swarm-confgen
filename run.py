@@ -15,6 +15,10 @@ def run(cmdline):
 
 
 if __name__ == "__main__":
+    all_containers = swarm.containers()
+    if len(all_containers) == 0:
+        print 'No containers -- keeping the config.'
+        exit()
     apps = []
     service_ports = set()
     for app_name in config:
